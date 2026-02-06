@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    button {
+      padding: 14px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #4f46e5;
+      color: white;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+    }
+    .ok { color: green; }
+    .fail { color: red; }
+  </style>
+</head>
+<body>
+
+<h2>browser check</h2>
+<button id="check">check</button>
+
+<div id="output" class="result"></div>
+
+<script>
+  document.getElementById('check').addEventListener('click', () => {
+    const checks = {
+      serviceWorker: 'serviceWorker' in navigator,
+      PushManager: 'PushManager' in window,
+      Notification: 'Notification' in window,
+      fetch: 'fetch' in window,
+      showNotification:
+        'ServiceWorkerRegistration' in window &&
+        ServiceWorkerRegistration.prototype.hasOwnProperty('showNotification'),
+      getKey:
+        'PushSubscription' in window &&
+        PushSubscription.prototype.hasOwnProperty('getKey')
+    };
+
+    let html = '<strong>result:</strong><br><br>';
+
+    for (const [key, value] of Object.entries(checks)) {
+      html += `${key}: <span class="${value ? 'ok' : 'fail'}">
+          ${value ? '✓ support' : '✗ not'}
+        </span><br>`;
+    }
+
+    document.getElementById('output').innerHTML = html;
+  });
+</script>
+
+</body>
+</html>
